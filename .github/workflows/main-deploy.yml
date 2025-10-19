@@ -48,7 +48,9 @@ jobs:
 
       - name: Bootstrap CDK (if needed)
         run: |
-          npx cdk bootstrap || echo "Already bootstrapped"
+          PATH=".venv/bin:$PATH" cdk bootstrap aws://111235777532/us-east-1 || echo "Already bootstrapped"
+        env:
+          AWS_REGION: us-east-1
 
       - name: Run integration tests
         run: make test-integration
