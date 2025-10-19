@@ -32,16 +32,20 @@ jobs:
           npm install -g aws-cdk
 
       - name: Run linting
+        id: lint
         run: make lint
         continue-on-error: true
 
       - name: Run unit tests
+        id: test-unit
         run: make test-unit
 
       - name: Run CDK tests
+        id: test-cdk
         run: make test-cdk
 
       - name: Synthesize CDK stack
+        id: synth
         run: make synth
 
       - name: Comment PR with results
@@ -50,8 +54,9 @@ jobs:
         with:
           script: |
             const output = `#### Test Results
-            - Unit Tests: ${{ steps.test.outcome == 'success' && '✅' || '❌' }}
-            - CDK Tests: ${{ steps.cdk.outcome == 'success' && '✅' || '❌' }}
+            - Linting: ${{ steps.lint.outcome == 'success' && '✅' || '⚠️' }}
+            - Unit Tests: ${{ steps.test-unit.outcome == 'success' && '✅' || '❌' }}
+            - CDK Tests: ${{ steps.test-cdk.outcome == 'success' && '✅' || '❌' }}
             - CDK Synth: ${{ steps.synth.outcome == 'success' && '✅' || '❌' }}
 
             **Note:** Integration tests run after merge to main.`;
