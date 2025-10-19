@@ -15,6 +15,9 @@ permissions:
 jobs:
   destroy:
     runs-on: ubuntu-latest
+    environment:
+      name: aws-deployment
+      url: https://console.aws.amazon.com/cloudformation
 
     steps:
       - name: Validate confirmation
