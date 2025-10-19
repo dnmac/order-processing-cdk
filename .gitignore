@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# CDK
+*.swp
+package-lock.json
+__pycache__
+.pytest_cache
+.env
+.vscode
+*.egg-info
+.cdk.staging
+cdk.out
+cdk.context.json
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage.xml
+*.cover
+.coverage.*
+nosetests.xml
+__snapshots__/
+
+# Logs
+*.log
+
+# Local environment
+.env
+.env.*
+
+# CDK bootstrap
+bootstrap-stack.yaml
+cdk-bootstrap-*
+
+# LocalStack / Docker
+.localstack/
+volume/
+
+# Linting
+.ruff_cache/
+.mypy_cache/
+.black_cache/

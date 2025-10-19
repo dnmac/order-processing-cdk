@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: cdk-order-processing-localstack
+    ports:
+      - "4566:4566"            # LocalStack Gateway
+      - "4510-4559:4510-4559"  # External services port range
+    environment:
+      - SERVICES=dynamodb,dynamodbstreams,lambda,sns,sqs,logs,iam,sts,kms
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_REMOTE_DOCKER=false
+      - DYNAMODB_SHARE_DB=1
+      - PERSISTENCE=0
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./sandbox/init-localstack.sh:/etc/localstack/init/ready.d/init-localstack.sh"
+      - "./lambdas:/tmp/lambdas"
+    networks:
+      - localstack-network
+
+networks:
+  localstack-network:
+    driver: bridge

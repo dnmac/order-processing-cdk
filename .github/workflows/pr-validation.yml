@@ -1,0 +1,64 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          make install
+          npm install -g aws-cdk
+
+      - name: Run linting
+        run: make lint
+        continue-on-error: true
+
+      - name: Run unit tests
+        run: make test-unit
+
+      - name: Run CDK tests
+        run: make test-cdk
+
+      - name: Synthesize CDK stack
+        run: make synth
+
+      - name: Comment PR with results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `#### Test Results
+            - Unit Tests: ${{ steps.test.outcome == 'success' && '✅' || '❌' }}
+            - CDK Tests: ${{ steps.cdk.outcome == 'success' && '✅' || '❌' }}
+            - CDK Synth: ${{ steps.synth.outcome == 'success' && '✅' || '❌' }}
+
+            **Note:** Integration tests run after merge to main.`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
