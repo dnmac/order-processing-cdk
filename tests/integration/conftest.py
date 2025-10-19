@@ -6,6 +6,7 @@ import uuid
 import boto3
 import pytest
 import sys
+from pathlib import Path
 from typing import Generator, Dict, Any
 
 
@@ -128,6 +129,9 @@ def deployed_stack(
     # Get virtualenv Python path
     venv_python = sys.executable
 
+    # Get project root (3 levels up from this file)
+    project_root = Path(__file__).parent.parent.parent
+
     # Deploy the stack with unique resource names
     unique_suffix = test_stack_name.split("-")[-1]  # Get unique ID from stack name
     print(f"\nDeploying integration test stack: {test_stack_name}")
@@ -145,7 +149,7 @@ def deployed_stack(
             "--context",
             f"resource_suffix={unique_suffix}",
         ],
-        cwd="/home/dan/git/saber/cdk_app",
+        cwd=str(project_root),
         capture_output=True,
         text=True,
         env={
@@ -206,7 +210,7 @@ def deployed_stack(
             "--context",
             f"stack_name={test_stack_name}",
         ],
-        cwd="/home/dan/git/saber/cdk_app",
+        cwd=str(project_root),
         capture_output=True,
         text=True,
         env={
